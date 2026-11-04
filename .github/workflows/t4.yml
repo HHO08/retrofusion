@@ -1,0 +1,9 @@
+name: T4
+on:
+  workflow_dispatch:
+jobs:
+  tests:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - run: make -C tests

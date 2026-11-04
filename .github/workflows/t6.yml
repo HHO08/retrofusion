@@ -1,0 +1,14 @@
+name: T6
+on:
+  workflow_dispatch:
+env:
+  PPSSPP_REPO: https://github.com/hrydgard/ppsspp.git
+  PPSSPP_TAG: v1.18.1
+  ANDROID_API: '21'
+  VERSION: ${{ inputs.version || '1.0.0-rf1' }}
+jobs:
+  tests:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - run: make -C tests
