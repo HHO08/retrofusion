@@ -1,0 +1,18 @@
+name: T3 tests
+'on':
+  workflow_dispatch: null
+permissions:
+  contents: write
+env:
+  PPSSPP_REPO: https://github.com/hrydgard/ppsspp.git
+  PPSSPP_TAG: v1.18.1
+  ANDROID_API: '21'
+  VERSION: ${{ inputs.version || '1.0.0-rf1' }}
+jobs:
+  tests:
+    name: host layer tests
+    runs-on: ubuntu-22.04
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build and run host tests
+      run: make -C tests
