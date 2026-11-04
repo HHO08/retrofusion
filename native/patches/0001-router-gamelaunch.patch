@@ -1,0 +1,23 @@
+diff --git a/UI/MainScreen.cpp b/UI/MainScreen.cpp
+index 29f34ea..1954242 100644
+--- a/UI/MainScreen.cpp
++++ b/UI/MainScreen.cpp
+@@ -49,6 +49,7 @@
+ 
+ #include "UI/BackgroundAudio.h"
+ #include "UI/EmuScreen.h"
++#include "UI/RetroFusion/RFGlue.h"  // RetroFusion: content router
+ #include "UI/MainScreen.h"
+ #include "UI/GameScreen.h"
+ #include "UI/GameInfoCache.h"
+@@ -90,7 +91,9 @@ bool LaunchFile(ScreenManager *screenManager, const Path &path) {
+ 		break;
+ 	default:
+ 		// Let the EmuScreen take care of it.
+-		screenManager->switchScreen(new EmuScreen(path));
++		// RetroFusion: PSP images still get the untouched EmuScreen; every other
++		// supported system is routed to its libretro core.
++		screenManager->switchScreen(RFCreateEmulatorScreen(path, screenManager));
+ 		break;
+ 	}
+ 	return true;

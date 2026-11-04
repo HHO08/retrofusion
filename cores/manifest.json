@@ -1,0 +1,636 @@
+{
+ "_comment": "Source of truth for systems, cores and ABI coverage. Consumed by tools/gen_cpp_tables.py, scripts/build-core.sh and the CI workflow.",
+ "cores": {
+  "bluemsx": {
+   "build_system": "make",
+   "commit": "e3086eb5d36d77fa11704cf53dc176686e70127d",
+   "commit_date": "2026-08-23",
+   "est_size_mb_arm64": 1.6,
+   "notes": "MSX",
+   "repo": "https://github.com/libretro/blueMSX-libretro",
+   "so_name": "bluemsx_libretro_android.so",
+   "tier": "base"
+  },
+  "desmume": {
+   "build_system": "make",
+   "commit": "95b4d798731caa809125b6c3c11d17cc332ff6ef",
+   "commit_date": "2026-09-20",
+   "est_size_mb_arm64": 1.6,
+   "notes": "NDS fallback for armeabi-v7a only",
+   "repo": "https://github.com/libretro/desmume",
+   "so_name": "desmume_libretro_android.so",
+   "tier": "fallback"
+  },
+  "dosbox_pure": {
+   "build_system": "make",
+   "commit": "cdaea10ce8cac231bc341ca05d4c5e4e5fe0fbd5",
+   "commit_date": "2026-10-06",
+   "est_size_mb_arm64": 2.0,
+   "notes": "MS-DOS",
+   "repo": "https://github.com/libretro/dosbox-pure",
+   "so_name": "dosbox_pure_libretro_android.so",
+   "tier": "heavy"
+  },
+  "fbneo": {
+   "build_system": "make",
+   "commit": "384609f72866dc00257c38a445d05cbb4f1c03a4",
+   "commit_date": "2026-11-04",
+   "est_size_mb_arm64": 13.0,
+   "notes": "Arcade + Neo Geo CD; size risk",
+   "repo": "https://github.com/libretro/FBNeo",
+   "so_name": "fbneo_libretro_android.so",
+   "tier": "heavy"
+  },
+  "fceumm": {
+   "build_system": "make",
+   "commit": "e0f3086a8104f8fbbe49a2615b10401504a9533f",
+   "commit_date": "2026-11-02",
+   "est_size_mb_arm64": 0.45,
+   "notes": "lightest reliable NES/FDS core",
+   "repo": "https://github.com/libretro/libretro-fceumm",
+   "so_name": "fceumm_libretro_android.so",
+   "tier": "base"
+  },
+  "flycast": {
+   "build_system": "make",
+   "commit": "",
+   "commit_date": "",
+   "est_size_mb_arm64": 5.8,
+   "notes": "Dreamcast; biggest non-ScummVM core",
+   "repo": "https://github.com/libretro/flycast",
+   "so_name": "flycast_libretro_android.so",
+   "tier": "heavy"
+  },
+  "gambatte": {
+   "build_system": "make",
+   "commit": "77f2567d718b8973d02caa2daa8dce4953faf811",
+   "commit_date": "2026-10-30",
+   "est_size_mb_arm64": 0.42,
+   "notes": "GB/GBC accuracy + low CPU",
+   "repo": "https://github.com/libretro/gambatte-libretro",
+   "so_name": "gambatte_libretro_android.so",
+   "tier": "base"
+  },
+  "genesis_plus_gx": {
+   "build_system": "make",
+   "commit": "f27655b592ef43f317272d79883bcaa10d3ac8ad",
+   "commit_date": "2026-10-30",
+   "est_size_mb_arm64": 1.2,
+   "notes": "covers 5 Sega systems",
+   "repo": "https://github.com/libretro/Genesis-Plus-GX",
+   "so_name": "genesis_plus_gx_libretro_android.so",
+   "tier": "base"
+  },
+  "mednafen_ngp": {
+   "build_system": "make",
+   "commit": "a50d5ac288a81f2104ddf43195a4efdd15c72227",
+   "commit_date": "2026-06-14",
+   "est_size_mb_arm64": 0.45,
+   "notes": "Neo Geo Pocket Color",
+   "repo": "https://github.com/libretro/beetle-ngp-libretro",
+   "so_name": "mednafen_ngp_libretro_android.so",
+   "tier": "base"
+  },
+  "mednafen_pce": {
+   "build_system": "make",
+   "commit": "b96c11e095b6a40a412d2da02766ae1c3f4fd539",
+   "commit_date": "2026-09-26",
+   "est_size_mb_arm64": 1.1,
+   "notes": "TurboGrafx-CD",
+   "repo": "https://github.com/libretro/beetle-pce-libretro",
+   "so_name": "mednafen_pce_libretro_android.so",
+   "tier": "base"
+  },
+  "mednafen_pce_fast": {
+   "build_system": "make",
+   "commit": "2de1ce1c3f237b161c126c54ba407990bb86d1e9",
+   "commit_date": "2026-10-30",
+   "est_size_mb_arm64": 0.9,
+   "notes": "TurboGrafx-16",
+   "repo": "https://github.com/libretro/beetle-pce-fast-libretro",
+   "so_name": "mednafen_pce_fast_libretro_android.so",
+   "tier": "base"
+  },
+  "mednafen_pcfx": {
+   "build_system": "make",
+   "commit": "c1650bad5fbdcc3c3ccd45e29e3983e1ccf16cff",
+   "commit_date": "2026-09-04",
+   "est_size_mb_arm64": 1.2,
+   "notes": "PC-FX",
+   "repo": "https://github.com/libretro/beetle-pcfx-libretro",
+   "so_name": "mednafen_pcfx_libretro_android.so",
+   "tier": "base"
+  },
+  "mednafen_psx": {
+   "build_system": "make",
+   "commit": "71ee81e77acd49296ecf4a683f5a61568ba80bf9",
+   "commit_date": "2026-11-01",
+   "est_size_mb_arm64": 3.5,
+   "notes": "PS1 software renderer (no HW build)",
+   "repo": "https://github.com/libretro/beetle-psx-libretro",
+   "so_name": "mednafen_psx_libretro_android.so",
+   "tier": "heavy"
+  },
+  "mednafen_saturn": {
+   "build_system": "make",
+   "commit": "30f4c12072d265c9e553dcb29386059114945dea",
+   "commit_date": "2026-11-02",
+   "est_size_mb_arm64": 1.7,
+   "notes": "Saturn",
+   "repo": "https://github.com/libretro/beetle-saturn-libretro",
+   "so_name": "mednafen_saturn_libretro_android.so",
+   "tier": "heavy"
+  },
+  "mednafen_wswan": {
+   "build_system": "make",
+   "commit": "4b01295838ea89e3f1355bbe4cb5cf98aa6108cd",
+   "commit_date": "2026-07-31",
+   "est_size_mb_arm64": 0.35,
+   "notes": "WonderSwan (Beetle Cygne successor repo)",
+   "repo": "https://github.com/libretro/beetle-wswan-libretro",
+   "so_name": "mednafen_wswan_libretro_android.so",
+   "tier": "base"
+  },
+  "melonds": {
+   "build_system": "make",
+   "commit": "66b5d2634cd0a79030562811e6e05f5532f800ba",
+   "commit_date": "2026-07-19",
+   "est_size_mb_arm64": 3.0,
+   "notes": "NDS; JIT requires 64-bit",
+   "repo": "https://github.com/libretro/melonDS",
+   "so_name": "melonds_libretro_android.so",
+   "tier": "heavy"
+  },
+  "mgba": {
+   "build_system": "cmake",
+   "commit": "7a12d6d4b9acb14c0ae62c9166b6a2f3d08007f6",
+   "commit_date": "2026-09-17",
+   "est_size_mb_arm64": 1.7,
+   "notes": "GBA; build without OpenGL renderer",
+   "repo": "https://github.com/libretro/mgba",
+   "so_name": "mgba_libretro_android.so",
+   "tier": "base"
+  },
+  "mupen64plus_next": {
+   "build_system": "make",
+   "commit": "15bada85906593376e8fd697f1b0b3af3a20f512",
+   "commit_date": "2026-10-22",
+   "est_size_mb_arm64": 2.1,
+   "notes": "N64, GLES3 dynarec build",
+   "repo": "https://github.com/libretro/mupen64plus-libretro-nx",
+   "so_name": "mupen64plus_next_gles3_libretro_android.so",
+   "tier": "heavy"
+  },
+  "np2kai": {
+   "build_system": "cmake",
+   "commit": "1ea561cd7fd62b33f4e7b3f1c2e30fc3e6089f28",
+   "commit_date": "2026-09-13",
+   "est_size_mb_arm64": 1.7,
+   "notes": "PC-88 + PC-98",
+   "repo": "https://github.com/libretro/NP2kai",
+   "so_name": "np2kai_libretro_android.so",
+   "tier": "base"
+  },
+  "opera": {
+   "build_system": "make",
+   "commit": "54fe4f3754e9b69c83ff50b5def5d6c60fef06ce",
+   "commit_date": "2026-10-28",
+   "est_size_mb_arm64": 2.1,
+   "notes": "3DO",
+   "repo": "https://github.com/libretro/opera-libretro",
+   "so_name": "opera_libretro_android.so",
+   "tier": "heavy"
+  },
+  "picodrive": {
+   "build_system": "make",
+   "commit": "1890c2932234c9d30f4cd3851d02228baae8f09e",
+   "commit_date": "2026-09-26",
+   "est_size_mb_arm64": 1.1,
+   "notes": "32X",
+   "repo": "https://github.com/libretro/picodrive",
+   "so_name": "picodrive_libretro_android.so",
+   "tier": "base"
+  },
+  "puae": {
+   "build_system": "make",
+   "commit": "c1d1d49d5c7cdad2005e86f1cbb279d39e041efc",
+   "commit_date": "2026-11-04",
+   "est_size_mb_arm64": 3.6,
+   "notes": "Amiga",
+   "repo": "https://github.com/libretro/libretro-uae",
+   "so_name": "puae_libretro_android.so",
+   "tier": "heavy"
+  },
+  "scummvm": {
+   "build_system": "make",
+   "commit": "e0ddc60bfabb1efdf1e135006c8914ca59d0596c",
+   "commit_date": "2026-10-22",
+   "est_size_mb_arm64": 8.0,
+   "notes": "engine subset build (see build-core.sh)",
+   "repo": "https://github.com/libretro/scummvm",
+   "so_name": "scummvm_libretro_android.so",
+   "tier": "heavy"
+  },
+  "snes9x": {
+   "build_system": "make",
+   "commit": "fae2fea08f74180759ef540ee94259213f503480",
+   "commit_date": "2026-09-19",
+   "est_size_mb_arm64": 1.5,
+   "notes": "SNES (not bsnes)",
+   "repo": "https://github.com/libretro/snes9x",
+   "so_name": "snes9x_libretro_android.so",
+   "tier": "base"
+  }
+ },
+ "frontend": {
+  "abis": [
+   "arm64-v8a",
+   "armeabi-v7a"
+  ],
+  "app_name": "RetroFusion",
+  "max_apk_mb": 100,
+  "package": "com.retrofusion.app",
+  "upstream": "https://github.com/hrydgard/ppsspp",
+  "upstream_tag": "v1.18.1"
+ },
+ "systems": {
+  "32x": {
+   "armv7": true,
+   "core": "picodrive",
+   "display_name": "Sega 32X",
+   "extensions": [
+    "32x"
+   ],
+   "hidden": false,
+   "needs_bios": false
+  },
+  "3do": {
+   "armv7": true,
+   "core": "opera",
+   "display_name": "3DO",
+   "extensions": [
+    "chd",
+    "cue",
+    "iso"
+   ],
+   "hidden": false,
+   "needs_bios": true
+  },
+  "amiga": {
+   "armv7": true,
+   "core": "puae",
+   "display_name": "Amiga",
+   "extensions": [
+    "adf",
+    "ipf",
+    "dsk",
+    "hdf",
+    "lha"
+   ],
+   "hidden": false,
+   "needs_bios": true
+  },
+  "arcade": {
+   "armv7": true,
+   "core": "fbneo",
+   "display_name": "Arcade (FinalBurn Neo)",
+   "extensions": [
+    "zip"
+   ],
+   "hidden": false,
+   "needs_bios": true
+  },
+  "dreamcast": {
+   "armv7": true,
+   "core": "flycast",
+   "display_name": "Dreamcast",
+   "extensions": [
+    "gdi",
+    "cdi"
+   ],
+   "hidden": false,
+   "needs_bios": false
+  },
+  "fds": {
+   "armv7": true,
+   "core": "fceumm",
+   "display_name": "Famicom Disk System",
+   "extensions": [
+    "fds"
+   ],
+   "hidden": false,
+   "needs_bios": true
+  },
+  "gamegear": {
+   "armv7": true,
+   "core": "genesis_plus_gx",
+   "display_name": "Game Gear",
+   "extensions": [
+    "gg"
+   ],
+   "hidden": false,
+   "needs_bios": false
+  },
+  "gb": {
+   "armv7": true,
+   "core": "gambatte",
+   "display_name": "Game Boy",
+   "extensions": [
+    "gb"
+   ],
+   "hidden": false,
+   "needs_bios": false
+  },
+  "gba": {
+   "armv7": true,
+   "core": "mgba",
+   "display_name": "Game Boy Advance",
+   "extensions": [
+    "gba"
+   ],
+   "hidden": false,
+   "needs_bios": true
+  },
+  "gbc": {
+   "armv7": true,
+   "core": "gambatte",
+   "display_name": "Game Boy Color",
+   "extensions": [
+    "gbc"
+   ],
+   "hidden": false,
+   "needs_bios": false
+  },
+  "genesis": {
+   "armv7": true,
+   "core": "genesis_plus_gx",
+   "display_name": "Genesis / Mega Drive",
+   "extensions": [
+    "md",
+    "gen",
+    "smd",
+    "68k"
+   ],
+   "hidden": false,
+   "needs_bios": false
+  },
+  "mastersystem": {
+   "armv7": true,
+   "core": "genesis_plus_gx",
+   "display_name": "Master System",
+   "extensions": [
+    "sms"
+   ],
+   "hidden": false,
+   "needs_bios": false
+  },
+  "msdos": {
+   "armv7": true,
+   "core": "dosbox_pure",
+   "display_name": "MS-DOS",
+   "extensions": [
+    "dosz",
+    "exe",
+    "com",
+    "bat",
+    "conf",
+    "zip"
+   ],
+   "hidden": false,
+   "needs_bios": true
+  },
+  "msx": {
+   "armv7": true,
+   "core": "bluemsx",
+   "display_name": "MSX",
+   "extensions": [
+    "rom",
+    "mx1",
+    "mx2",
+    "cas",
+    "dsk"
+   ],
+   "hidden": false,
+   "needs_bios": true
+  },
+  "n64": {
+   "armv7": true,
+   "core": "mupen64plus_next",
+   "display_name": "Nintendo 64",
+   "extensions": [
+    "n64",
+    "z64",
+    "v64"
+   ],
+   "hidden": false,
+   "needs_bios": false
+  },
+  "nds": {
+   "armv7": false,
+   "core": "melonds",
+   "display_name": "Nintendo DS",
+   "extensions": [
+    "nds",
+    "srl"
+   ],
+   "hidden": false,
+   "needs_bios": true
+  },
+  "nds32": {
+   "armv7": true,
+   "core": "desmume",
+   "display_name": "Nintendo DS (32-bit fallback)",
+   "extensions": [],
+   "hidden": true,
+   "needs_bios": true
+  },
+  "nes": {
+   "armv7": true,
+   "core": "fceumm",
+   "display_name": "Nintendo Entertainment System",
+   "extensions": [
+    "nes",
+    "unf",
+    "unif"
+   ],
+   "hidden": false,
+   "needs_bios": false
+  },
+  "ngcd": {
+   "armv7": true,
+   "core": "fbneo",
+   "display_name": "Neo Geo CD",
+   "extensions": [
+    "chd",
+    "cue"
+   ],
+   "hidden": false,
+   "needs_bios": true
+  },
+  "ngpc": {
+   "armv7": true,
+   "core": "mednafen_ngp",
+   "display_name": "Neo Geo Pocket Color",
+   "extensions": [
+    "ngc",
+    "ngpc"
+   ],
+   "hidden": false,
+   "needs_bios": false
+  },
+  "pc88": {
+   "armv7": true,
+   "core": "np2kai",
+   "display_name": "PC-8801",
+   "extensions": [
+    "d88",
+    "88d"
+   ],
+   "hidden": false,
+   "needs_bios": true
+  },
+  "pc98": {
+   "armv7": true,
+   "core": "np2kai",
+   "display_name": "PC-9801",
+   "extensions": [
+    "hdi",
+    "fdi",
+    "hdm",
+    "d98",
+    "zip"
+   ],
+   "hidden": false,
+   "needs_bios": true
+  },
+  "pcfx": {
+   "armv7": true,
+   "core": "mednafen_pcfx",
+   "display_name": "PC-FX",
+   "extensions": [
+    "chd",
+    "cue"
+   ],
+   "hidden": false,
+   "needs_bios": true
+  },
+  "ps1": {
+   "armv7": true,
+   "core": "mednafen_psx",
+   "display_name": "PlayStation",
+   "extensions": [
+    "pbp",
+    "m3u",
+    "chd",
+    "cue",
+    "iso"
+   ],
+   "hidden": false,
+   "needs_bios": true
+  },
+  "psp": {
+   "armv7": true,
+   "core": "ppsspp_native",
+   "display_name": "PlayStation Portable",
+   "extensions": [
+    "iso",
+    "cso",
+    "pbp",
+    "elf",
+    "prx"
+   ],
+   "hidden": false,
+   "needs_bios": false
+  },
+  "saturn": {
+   "armv7": true,
+   "core": "mednafen_saturn",
+   "display_name": "Sega Saturn",
+   "extensions": [
+    "chd",
+    "m3u"
+   ],
+   "hidden": false,
+   "needs_bios": true
+  },
+  "scummvm": {
+   "armv7": true,
+   "core": "scummvm",
+   "display_name": "ScummVM",
+   "extensions": [
+    "scummvm",
+    "svm"
+   ],
+   "hidden": false,
+   "needs_bios": false
+  },
+  "segacd": {
+   "armv7": true,
+   "core": "genesis_plus_gx",
+   "display_name": "Sega CD",
+   "extensions": [
+    "chd",
+    "cue",
+    "iso"
+   ],
+   "hidden": false,
+   "needs_bios": true
+  },
+  "segapico": {
+   "armv7": true,
+   "core": "genesis_plus_gx",
+   "display_name": "Sega Pico",
+   "extensions": [
+    "bin"
+   ],
+   "hidden": false,
+   "needs_bios": false
+  },
+  "snes": {
+   "armv7": true,
+   "core": "snes9x",
+   "display_name": "Super Nintendo",
+   "extensions": [
+    "smc",
+    "sfc",
+    "fig",
+    "swc",
+    "bs"
+   ],
+   "hidden": false,
+   "needs_bios": false
+  },
+  "tg16": {
+   "armv7": true,
+   "core": "mednafen_pce_fast",
+   "display_name": "TurboGrafx-16",
+   "extensions": [
+    "pce"
+   ],
+   "hidden": false,
+   "needs_bios": false
+  },
+  "tgcd": {
+   "armv7": true,
+   "core": "mednafen_pce",
+   "display_name": "TurboGrafx-CD",
+   "extensions": [
+    "chd",
+    "cue"
+   ],
+   "hidden": false,
+   "needs_bios": true
+  },
+  "wonderswan": {
+   "armv7": true,
+   "core": "mednafen_wswan",
+   "display_name": "WonderSwan",
+   "extensions": [
+    "ws",
+    "wsc"
+   ],
+   "hidden": false,
+   "needs_bios": false
+  }
+ }
+}

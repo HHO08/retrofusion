@@ -1,0 +1,17 @@
+# Build outputs
+dist/
+build/
+.work/
+*.apk
+*.aab
+*.keystore
+*.jks
+
+# Never commit signing material or local secrets
+secrets/
+*.env
+
+# Editor / OS
+.DS_Store
+.vscode/
+.idea/

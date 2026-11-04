@@ -1,0 +1,29 @@
+diff --git a/UI/GameSettingsScreen.cpp b/UI/GameSettingsScreen.cpp
+index da0843d..a59f206 100644
+--- a/UI/GameSettingsScreen.cpp
++++ b/UI/GameSettingsScreen.cpp
+@@ -42,6 +42,7 @@
+ #include "UI/EmuScreen.h"
+ #include "UI/DriverManagerScreen.h"
+ #include "UI/GameSettingsScreen.h"
++#include "UI/RetroFusion/RFGlue.h"  // RetroFusion: per-core settings tab
+ #include "UI/GameInfoCache.h"
+ #include "UI/GamepadEmu.h"
+ #include "UI/MiscScreens.h"
+@@ -269,6 +270,16 @@ void GameSettingsScreen::CreateTabs() {
+ 	systemSettings->SetSpacing(0);
+ 	CreateSystemSettings(systemSettings);
+ 
++	// RetroFusion: when a libretro core is running, append a "Core Settings" tab
++	// built with the exact same UI widgets as every other tab, so the user sees
++	// no difference from stock PPSSPP - but the controls drive that core's
++	// options (see cores/core_options.json).
++	if (RFRunningCoreId() != nullptr) {
++		LinearLayout *coreSettings = AddTab("GameSettingsCore", "Core Settings");
++		coreSettings->SetSpacing(0);
++		RFBuildCoreSettingsTab(coreSettings, screenManager());
++	}
++
+ 	int deviceType = System_GetPropertyInt(SYSPROP_DEVICE_TYPE);
+ 	if ((deviceType == DEVICE_TYPE_VR) || g_Config.bForceVR) {
+ 		LinearLayout *vrSettings = AddTab("GameSettingsVR", ms->T("VR"));

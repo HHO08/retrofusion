@@ -1,0 +1,38 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index a355317..263c6ba 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1525,6 +1525,15 @@ list(APPEND NativeAppSource
+ 	UI/DisplayLayoutScreen.h
+ 	UI/EmuScreen.h
+ 	UI/EmuScreen.cpp
++	# RetroFusion: libretro core host + PPSSPP glue. Additive only - no PSP source
++	# is modified; the PSP path still compiles and links exactly as upstream.
++	UI/RetroFusion/RFGlue.cpp
++	UI/RetroFusion/RFPlatform.cpp
++	UI/RetroFusion/corehost/libretro_host.cpp
++	UI/RetroFusion/corehost/core_options.cpp
++	UI/RetroFusion/corehost/core_registry.cpp
++	UI/RetroFusion/corehost/content_sniff.cpp
++	UI/RetroFusion/corehost/path_util.cpp
+ 	UI/GameInfoCache.h
+ 	UI/GameInfoCache.cpp
+ 	UI/MainScreen.h
+diff --git a/android/jni/Android.mk b/android/jni/Android.mk
+index 8e45dc5..32ffb74 100644
+--- a/android/jni/Android.mk
++++ b/android/jni/Android.mk
+@@ -835,6 +835,13 @@ LOCAL_SRC_FILES := \
+   $(SRC)/UI/DriverManagerScreen.cpp \
+   $(SRC)/UI/DisplayLayoutScreen.cpp \
+   $(SRC)/UI/EmuScreen.cpp \
++  $(SRC)/UI/RetroFusion/RFGlue.cpp \
++  $(SRC)/UI/RetroFusion/RFPlatform.cpp \
++  $(SRC)/UI/RetroFusion/corehost/libretro_host.cpp \
++  $(SRC)/UI/RetroFusion/corehost/core_options.cpp \
++  $(SRC)/UI/RetroFusion/corehost/core_registry.cpp \
++  $(SRC)/UI/RetroFusion/corehost/content_sniff.cpp \
++  $(SRC)/UI/RetroFusion/corehost/path_util.cpp \
+   $(SRC)/UI/MainScreen.cpp \
+   $(SRC)/UI/TabbedDialogScreen.cpp \
+   $(SRC)/UI/MemStickScreen.cpp \

@@ -1,0 +1,45 @@
+diff --git a/android/build.gradle b/android/build.gradle
+index b5fc122..a2611af 100644
+--- a/android/build.gradle
++++ b/android/build.gradle
+@@ -79,12 +79,29 @@ android {
+ 
+ 		minSdk 9
+ 		targetSdk 35
++		// RetroFusion: own identity. The work order requires a name and icon that are
++		// clearly distinct from PPSSPP, and a version scheme we control.
++		applicationId 'com.retrofusion.app'
++		versionName '1.0.0-rf1'
++		versionCode 1180101
+ 		if (project.hasProperty("ANDROID_VERSION_CODE") && project.hasProperty("ANDROID_VERSION_NAME")) {
+ 			versionCode ANDROID_VERSION_CODE
+ 			versionName ANDROID_VERSION_NAME
+ 		}
+ 		signingConfig signingConfigs.debug
+ 	}
++	// RetroFusion: per-ABI APKs instead of one universal APK.
++	// 33 systems x 2 ABIs x PPSSPP's own native libraries cannot fit in a
++	// single 100 MB APK (see docs/SIZE-BUDGET.md), while each per-ABI APK
++	// does, and every real device only ever needs one of them.
++	splits {
++		abi {
++			enable true
++			reset()
++			include 'arm64-v8a', 'armeabi-v7a'
++			universalApk false
++		}
++	}
+ 	buildTypes {
+ 		debug {
+ 			minifyEnabled = false
+@@ -123,6 +140,10 @@ android {
+ 		}
+ 		normal {
+ 			res.srcDirs = ['normal/res']
++			// RetroFusion: every libretro core built by CI is copied to
++			// lib/cores/<abi>/ and packed as a normal native library, so no
++			// writable-executable trick is needed on Android 10+.
++			jniLibs.srcDirs += ['../lib/cores']
+ 		}
+ 		gold {
+ 			res.srcDirs = ['gold/res']

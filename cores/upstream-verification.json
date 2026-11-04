@@ -1,0 +1,213 @@
+{
+ "fceumm": {
+  "repo": "libretro/libretro-fceumm",
+  "sha": "e0f3086a8104f8fbbe49a2615b10401504a9533f",
+  "date": "2026-11-02",
+  "build_file": "Makefile",
+  "android_ref": false,
+  "abis": [],
+  "build_bytes": 26
+ },
+ "gambatte": {
+  "repo": "libretro/gambatte-libretro",
+  "sha": "77f2567d718b8973d02caa2daa8dce4953faf811",
+  "date": "2026-10-30",
+  "build_file": "Makefile",
+  "android_ref": false,
+  "abis": [],
+  "build_bytes": 26
+ },
+ "mgba": {
+  "repo": "libretro/mgba",
+  "sha": "7a12d6d4b9acb14c0ae62c9166b6a2f3d08007f6",
+  "date": "2026-09-17",
+  "build_file": "CMakeLists.txt",
+  "android_ref": false,
+  "abis": [],
+  "build_bytes": 59719
+ },
+ "mupen64plus_next": {
+  "repo": "libretro/mupen64plus-libretro-nx",
+  "sha": "15bada85906593376e8fd697f1b0b3af3a20f512",
+  "date": "2026-10-22",
+  "build_file": "Makefile",
+  "android_ref": true,
+  "abis": [],
+  "build_bytes": 22969
+ },
+ "melonds": {
+  "repo": "libretro/melonDS",
+  "sha": "66b5d2634cd0a79030562811e6e05f5532f800ba",
+  "date": "2026-07-19",
+  "build_file": "Makefile",
+  "android_ref": false,
+  "abis": [],
+  "build_bytes": 18250
+ },
+ "snes9x": {
+  "repo": "libretro/snes9x",
+  "sha": "fae2fea08f74180759ef540ee94259213f503480",
+  "date": "2026-09-19",
+  "build_file": null,
+  "android_ref": false,
+  "abis": [],
+  "build_bytes": 0
+ },
+ "picodrive": {
+  "repo": "libretro/picodrive",
+  "sha": "1890c2932234c9d30f4cd3851d02228baae8f09e",
+  "date": "2026-09-26",
+  "build_file": "Makefile",
+  "android_ref": false,
+  "abis": [],
+  "build_bytes": 16130
+ },
+ "flycast": {
+  "repo": "libretro/flycast",
+  "error": "sha_lookup_failed"
+ },
+ "genesis_plus_gx": {
+  "repo": "libretro/Genesis-Plus-GX",
+  "sha": "f27655b592ef43f317272d79883bcaa10d3ac8ad",
+  "date": "2026-10-30",
+  "build_file": null,
+  "android_ref": false,
+  "abis": [],
+  "build_bytes": 0
+ },
+ "mednafen_saturn": {
+  "repo": "libretro/beetle-saturn-libretro",
+  "sha": "30f4c12072d265c9e553dcb29386059114945dea",
+  "date": "2026-11-02",
+  "build_file": "Makefile",
+  "android_ref": false,
+  "abis": [],
+  "build_bytes": 17769
+ },
+ "opera": {
+  "repo": "libretro/opera-libretro",
+  "sha": "54fe4f3754e9b69c83ff50b5def5d6c60fef06ce",
+  "date": "2026-10-28",
+  "build_file": "Makefile",
+  "android_ref": false,
+  "abis": [],
+  "build_bytes": 23849
+ },
+ "puae": {
+  "repo": "libretro/libretro-uae",
+  "sha": "c1d1d49d5c7cdad2005e86f1cbb279d39e041efc",
+  "date": "2026-11-04",
+  "build_file": "Makefile",
+  "android_ref": true,
+  "abis": [],
+  "build_bytes": 14877
+ },
+ "fbneo": {
+  "repo": "libretro/FBNeo",
+  "sha": "384609f72866dc00257c38a445d05cbb4f1c03a4",
+  "date": "2026-11-04",
+  "build_file": null,
+  "android_ref": false,
+  "abis": [],
+  "build_bytes": 0
+ },
+ "bluemsx": {
+  "repo": "libretro/blueMSX-libretro",
+  "sha": "e3086eb5d36d77fa11704cf53dc176686e70127d",
+  "date": "2026-08-23",
+  "build_file": "Makefile",
+  "android_ref": false,
+  "abis": [],
+  "build_bytes": 26
+ },
+ "mednafen_wswan": {
+  "repo": "libretro/beetle-wswan-libretro",
+  "sha": "4b01295838ea89e3f1355bbe4cb5cf98aa6108cd",
+  "date": "2026-07-31",
+  "build_file": "Makefile",
+  "android_ref": false,
+  "abis": [],
+  "build_bytes": 22821
+ },
+ "mednafen_psx": {
+  "repo": "libretro/beetle-psx-libretro",
+  "sha": "71ee81e77acd49296ecf4a683f5a61568ba80bf9",
+  "date": "2026-11-01",
+  "build_file": "Makefile",
+  "android_ref": false,
+  "abis": [],
+  "build_bytes": 22690
+ },
+ "np2kai": {
+  "repo": "libretro/NP2kai",
+  "sha": "1ea561cd7fd62b33f4e7b3f1c2e30fc3e6089f28",
+  "date": "2026-09-13",
+  "build_file": "CMakeLists.txt",
+  "android_ref": false,
+  "abis": [],
+  "build_bytes": 76275
+ },
+ "mednafen_pcfx": {
+  "repo": "libretro/beetle-pcfx-libretro",
+  "sha": "c1650bad5fbdcc3c3ccd45e29e3983e1ccf16cff",
+  "date": "2026-09-04",
+  "build_file": "Makefile",
+  "android_ref": false,
+  "abis": [],
+  "build_bytes": 22086
+ },
+ "mednafen_pce_fast": {
+  "repo": "libretro/beetle-pce-fast-libretro",
+  "sha": "2de1ce1c3f237b161c126c54ba407990bb86d1e9",
+  "date": "2026-10-30",
+  "build_file": "Makefile",
+  "android_ref": false,
+  "abis": [],
+  "build_bytes": 24859
+ },
+ "mednafen_pce": {
+  "repo": "libretro/beetle-pce-libretro",
+  "sha": "b96c11e095b6a40a412d2da02766ae1c3f4fd539",
+  "date": "2026-09-26",
+  "build_file": "Makefile",
+  "android_ref": false,
+  "abis": [],
+  "build_bytes": 22452
+ },
+ "dosbox_pure": {
+  "repo": "libretro/dosbox-pure",
+  "sha": "cdaea10ce8cac231bc341ca05d4c5e4e5fe0fbd5",
+  "date": "2026-10-06",
+  "build_file": "Makefile",
+  "android_ref": false,
+  "abis": [],
+  "build_bytes": 10705
+ },
+ "scummvm": {
+  "repo": "libretro/scummvm",
+  "sha": "e0ddc60bfabb1efdf1e135006c8914ca59d0596c",
+  "date": "2026-10-22",
+  "build_file": "Makefile",
+  "android_ref": false,
+  "abis": [],
+  "build_bytes": 5353
+ },
+ "mednafen_ngp": {
+  "repo": "libretro/beetle-ngp-libretro",
+  "sha": "a50d5ac288a81f2104ddf43195a4efdd15c72227",
+  "date": "2026-06-14",
+  "build_file": "Makefile",
+  "android_ref": false,
+  "abis": [],
+  "build_bytes": 23318
+ },
+ "desmume": {
+  "repo": "libretro/desmume",
+  "sha": "95b4d798731caa809125b6c3c11d17cc332ff6ef",
+  "date": "2026-09-20",
+  "build_file": null,
+  "android_ref": false,
+  "abis": [],
+  "build_bytes": 0
+ }
+}

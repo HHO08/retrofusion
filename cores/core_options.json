@@ -1,0 +1,315 @@
+{
+ "_comment": [
+  "Per-core option schema. Values come straight from the work order (section 5)",
+  "plus libretro community-proven defaults for weak devices.",
+  "  default = balanced profile (mid-range phone)",
+  "  potato  = weak-device profile; this is what a fresh install uses",
+  " 'restart' marks options the core only reads at load time.",
+  "Unknown/renamed keys are inert: CoreHost only returns a variable if the core",
+  "asks for that exact key, so a stale key can never crash anything."
+ ],
+
+ "mupen64plus_next": [
+  {"key": "mupen64plus-cpucore", "label": "CPU core", "kind": "enum",
+   "choices": [["Interpreter", "pure_interpreter"], ["Cached interpreter", "cached_interpreter"], ["Dynamic recompiler", "dynamic_recompiler"]],
+   "default": "dynamic_recompiler", "potato": "dynamic_recompiler", "restart": true,
+   "info": "Dynarec is mandatory on weak devices; the interpreter cannot reach playable speed."},
+  {"key": "mupen64plus-rspmode", "label": "RSP plugin", "kind": "enum",
+   "choices": [["HLE (fast)", "hle"], ["LLE (accurate)", "lle"]],
+   "default": "hle", "potato": "hle", "restart": true,
+   "info": "HLE is far faster; LLE is only needed for a handful of games."},
+  {"key": "mupen64plus-EnableFBEmulation", "label": "Frame buffer emulation", "kind": "enum",
+   "choices": [["Enabled", "True"], ["Disabled", "False"]],
+   "default": "True", "potato": "True",
+   "info": "Keep enabled: disabling it breaks many games' menus and effects."},
+  {"key": "mupen64plus-txHiresEnable", "label": "Hi-res textures", "kind": "enum",
+   "choices": [["Enabled", "True"], ["Disabled", "False"]],
+   "default": "False", "potato": "False",
+   "info": "Always off on weak devices: custom textures cost RAM and bandwidth."},
+  {"key": "mupen64plus-txFilterIgnoreBG", "label": "Ignore background textures", "kind": "enum",
+   "choices": [["Enabled", "True"], ["Disabled", "False"]],
+   "default": "True", "potato": "True"},
+  {"key": "mupen64plus-MultiSampling", "label": "Anti-aliasing (MSAA)", "kind": "enum",
+   "choices": [["Off", "0"], ["2x", "2"], ["4x", "4"], ["8x", "8"]],
+   "default": "0", "potato": "0", "restart": true},
+  {"key": "mupen64plus-EnableLegacyBlending", "label": "Legacy blending", "kind": "enum",
+   "choices": [["Enabled", "True"], ["Disabled", "False"]],
+   "default": "False", "potato": "False"},
+  {"key": "mupen64plus-CountPerOp", "label": "Count per op", "kind": "int",
+   "min": 0, "max": 6, "default": "1", "potato": "2",
+   "info": "2 improves compatibility at some CPU cost; required by many titles."},
+  {"key": "mupen64plus-ThreadedRenderer", "label": "Threaded renderer", "kind": "enum",
+   "choices": [["Enabled", "True"], ["Disabled", "False"]],
+   "default": "True", "potato": "True"}
+ ],
+
+ "flycast": [
+  {"key": "reicast_internal_resolution", "label": "Internal resolution", "kind": "enum",
+   "choices": [["640x480 (native)", "640x480"], ["1280x960", "1280x960"], ["1920x1440", "1920x1440"]],
+   "default": "640x480", "potato": "640x480",
+   "info": "Native only on weak devices; upscaling is the single biggest Dreamcast cost."},
+  {"key": "reicast_threaded_rendering", "label": "Threaded rendering", "kind": "enum",
+   "choices": [["Enabled", "enabled"], ["Disabled", "disabled"]],
+   "default": "enabled", "potato": "enabled",
+   "info": "Big win on multi-core phones; adds a little input lag."},
+  {"key": "reicast_synchronous_rendering", "label": "Synchronous rendering", "kind": "enum",
+   "choices": [["Enabled", "enabled"], ["Disabled", "disabled"]],
+   "default": "enabled", "potato": "enabled",
+   "info": "Fixes frame-pacing instability documented by the project itself."},
+  {"key": "reicast_alpha_sorting", "label": "Alpha sorting", "kind": "enum",
+   "choices": [["Per-strip (fast)", "per-strip"], ["Per-triangle", "per-triangle"], ["Per-pixel (accurate)", "per-pixel"]],
+   "default": "per-strip", "potato": "per-strip"},
+  {"key": "reicast_emulate_fog", "label": "Fog effects", "kind": "enum",
+   "choices": [["Enabled", "enabled"], ["Disabled", "disabled"]],
+   "default": "disabled", "potato": "disabled"},
+  {"key": "reicast_anisotropic_filtering", "label": "Anisotropic filtering", "kind": "enum",
+   "choices": [["Off", "0"], ["2x", "2"], ["4x", "4"], ["16x", "16"]],
+   "default": "0", "potato": "0"},
+  {"key": "reicast_dsp", "label": "DSP (audio processor)", "kind": "enum",
+   "choices": [["Disabled (fast)", "disabled"], ["Enabled", "enabled"]],
+   "default": "disabled", "potato": "disabled",
+   "info": "Off removes a large CPU load with no audible loss for most titles."},
+  {"key": "reicast_fast_gdrom_load", "label": "Fast GD-ROM load", "kind": "enum",
+   "choices": [["Enabled", "enabled"], ["Disabled", "disabled"]],
+   "default": "enabled", "potato": "enabled"},
+  {"key": "reicast_fast_cdda", "label": "Fast CD audio", "kind": "enum",
+   "choices": [["Enabled", "enabled"], ["Disabled", "disabled"]],
+   "default": "enabled", "potato": "enabled"}
+ ],
+
+ "mednafen_saturn": [
+  {"key": "beetle_saturn_cd_access_method", "label": "CD access method", "kind": "enum",
+   "choices": [["Asynchronous (faster)", "async"], ["Synchronous", "sync"], ["Preload", "preload"]],
+   "default": "async", "potato": "async", "restart": true},
+  {"key": "beetle_saturn_horizontal_resolution", "label": "Horizontal resolution", "kind": "enum",
+   "choices": [["Native", "native"], ["320", "320"], ["352", "352"], ["640", "640"], ["704", "704"]],
+   "default": "native", "potato": "native", "restart": true},
+  {"key": "beetle_saturn_analog_mode", "label": "Analog mode", "kind": "enum",
+   "choices": [["Disabled", "disabled"], ["Enabled", "enabled"]],
+   "default": "disabled", "potato": "disabled"}
+ ],
+
+ "mednafen_psx": [
+  {"key": "beetle_psx_internal_resolution", "label": "Internal resolution", "kind": "enum",
+   "choices": [["1x (native)", "1x"], ["2x", "2x"], ["4x", "4x"]],
+   "default": "1x", "potato": "1x", "restart": true,
+   "info": "Software renderer: anything above 1x multiplies CPU cost."},
+  {"key": "beetle_psx_skip_bios", "label": "Skip BIOS", "kind": "enum",
+   "choices": [["Disabled (recommended)", "disabled"], ["Enabled", "enabled"]],
+   "default": "disabled", "potato": "disabled", "restart": true},
+  {"key": "beetle_psx_core_renderer", "label": "Renderer", "kind": "enum",
+   "choices": [["Software (fast)", "hardware_soft"], ["Hardware GL", "hardware_gl"]],
+   "default": "hardware_soft", "potato": "hardware_soft"},
+  {"key": "beetle_psx_dither_mode", "label": "Dithering", "kind": "enum",
+   "choices": [["1x native", "1x_native"], ["2x native", "2x_native"], ["Internal", "internal"]],
+   "default": "1x_native", "potato": "1x_native"},
+  {"key": "beetle_psx_gpu_overclock", "label": "GPU overclock", "kind": "enum",
+   "choices": [["1x", "1x"], ["2x", "2x"]],
+   "default": "1x", "potato": "1x"}
+ ],
+
+ "melonds": [
+  {"key": "melonds_jit_enable", "label": "JIT recompiler", "kind": "enum",
+   "choices": [["Enabled", "enabled"], ["Disabled", "disabled"]],
+   "default": "enabled", "potato": "enabled", "restart": true,
+   "info": "Mandatory for playable speed; 64-bit builds only."},
+  {"key": "melonds_threaded_renderer", "label": "Threaded renderer", "kind": "enum",
+   "choices": [["Enabled", "enabled"], ["Disabled", "disabled"]],
+   "default": "enabled", "potato": "enabled"},
+  {"key": "melonds_number_of_swaps", "label": "Number of swaps", "kind": "int",
+   "min": 1, "max": 4, "default": "2", "potato": "2"},
+  {"key": "melonds_screen_layout", "label": "Screen layout", "kind": "enum",
+   "choices": [["Top/Bottom", "Top/Bottom"], ["Left/Right", "Left/Right"], ["Top only", "Top only"]],
+   "default": "Top/Bottom", "potato": "Top/Bottom"}
+ ],
+
+ "desmume": [
+  {"key": "desmume_cpu_mode", "label": "CPU mode", "kind": "enum",
+   "choices": [["JIT (fast)", "jit"], ["Interpreter", "interpreter"]],
+   "default": "jit", "potato": "jit", "restart": true},
+  {"key": "desmume_frameskip", "label": "Frameskip", "kind": "int",
+   "min": 0, "max": 9, "default": "0", "potato": "1"}
+ ],
+
+ "snes9x": [
+  {"key": "snes9x_reduce_sprite_flicker", "label": "Reduce sprite flicker", "kind": "enum",
+   "choices": [["Off", "disabled"], ["On", "enabled"]],
+   "default": "disabled", "potato": "disabled", "restart": true},
+  {"key": "snes9x_overclock_superfx", "label": "SuperFX overclock", "kind": "enum",
+   "choices": [["100%", "100%"], ["150%", "150%"], ["200%", "200%"]],
+   "default": "100%", "potato": "100%"},
+  {"key": "snes9x_upscale", "label": "Upscale", "kind": "enum",
+   "choices": [["Off", "disabled"], ["On", "enabled"]],
+   "default": "disabled", "potato": "disabled"},
+  {"key": "snes9x_block_invalid_vram_access", "label": "Block invalid VRAM access", "kind": "enum",
+   "choices": [["Off", "disabled"], ["On", "enabled"]],
+   "default": "enabled", "potato": "enabled"}
+ ],
+
+ "mgba": [
+  {"key": "mgba_force_gbp", "label": "Force Game Boy Player", "kind": "enum",
+   "choices": [["Disabled", "disabled"], ["Enabled", "enabled"]],
+   "default": "disabled", "potato": "disabled",
+   "info": "Only enable when a game misdetects the hardware."},
+  {"key": "mgba_use_bios", "label": "Use BIOS", "kind": "enum",
+   "choices": [["Disabled (HLE)", "disabled"], ["Enabled", "enabled"]],
+   "default": "disabled", "potato": "disabled"},
+  {"key": "mgba_frameskip", "label": "Frameskip", "kind": "int",
+   "min": 0, "max": 10, "default": "0", "potato": "0"}
+ ],
+
+ "gambatte": [
+  {"key": "gambatte_gb_colorization", "label": "Colorization", "kind": "enum",
+   "choices": [["Auto", "auto"], ["GBC", "GBC"], ["SGB", "SGB"], ["Disabled", "disabled"]],
+   "default": "auto", "potato": "auto"},
+  {"key": "gambatte_gb_bootloader", "label": "Bootloader", "kind": "enum",
+   "choices": [["Disabled (fast)", "disabled"], ["Enabled", "enabled"]],
+   "default": "disabled", "potato": "disabled"}
+ ],
+
+ "genesis_plus_gx": [
+  {"key": "genesis_plus_gx_render", "label": "Renderer", "kind": "enum",
+   "choices": [["Single field (fast)", "single field"], ["Double field", "double field"]],
+   "default": "single field", "potato": "single field"},
+  {"key": "genesis_plus_gx_frameskip", "label": "Frameskip", "kind": "enum",
+   "choices": [["Off", "disabled"], ["On", "enabled"]],
+   "default": "disabled", "potato": "disabled"},
+  {"key": "genesis_plus_gx_region_detect", "label": "Region", "kind": "enum",
+   "choices": [["Auto", "auto"], ["NTSC-U", "ntsc-u"], ["PAL", "pal"]],
+   "default": "auto", "potato": "auto"},
+  {"key": "genesis_plus_gx_cd_latency", "label": "CD latency", "kind": "enum",
+   "choices": [["Fast (1x)", "1x"], ["Accurate", "accurate"]],
+   "default": "1x", "potato": "1x"}
+ ],
+
+ "picodrive": [
+  {"key": "picodrive_renderer", "label": "Renderer", "kind": "enum",
+   "choices": [["Fast", "fast"], ["Accurate", "accurate"]],
+   "default": "fast", "potato": "fast"},
+  {"key": "picodrive_frameskip", "label": "Frameskip", "kind": "int",
+   "min": 0, "max": 3, "default": "0", "potato": "1"}
+ ],
+
+ "fbneo": [
+  {"key": "fbneo-frameskip", "label": "Frameskip", "kind": "int",
+   "min": 0, "max": 3, "default": "0", "potato": "1"},
+  {"key": "fbneo-hiscores", "label": "Save high scores", "kind": "enum",
+   "choices": [["Enabled", "enabled"], ["Disabled", "disabled"]],
+   "default": "disabled", "potato": "disabled"},
+  {"key": "fbneo-sample-rate", "label": "Sample rate", "kind": "enum",
+   "choices": [["48000", "48000"], ["44100", "44100"], ["22050 (fastest)", "22050"]],
+   "default": "44100", "potato": "22050"},
+  {"key": "fbneo-allow-patched-romsets", "label": "Allow patched sets", "kind": "enum",
+   "choices": [["Disabled", "disabled"], ["Enabled", "enabled"]],
+   "default": "disabled", "potato": "disabled"}
+ ],
+
+ "puae": [
+  {"key": "puae_floppy_speed", "label": "Floppy speed", "kind": "enum",
+   "choices": [["100% (accurate)", "100"], ["200%", "200"], ["400%", "400"], ["800% (fastest)", "800"]],
+   "default": "400", "potato": "800",
+   "info": "Fast floppy emulation removes most of the loading wait on slow phones."},
+  {"key": "puae_cpu_compatibility", "label": "CPU compatibility", "kind": "enum",
+   "choices": [["Accurate cycle", "accurate"], ["Compatible (fast)", "compatible"], ["Fastest", "fastest"]],
+   "default": "compatible", "potato": "fastest"},
+  {"key": "puae_immediate_blits", "label": "Immediate blits", "kind": "enum",
+   "choices": [["Enabled", "enabled"], ["Disabled", "disabled"]],
+   "default": "enabled", "potato": "enabled"}
+ ],
+
+ "dosbox_pure": [
+  {"key": "dosbox_pure_cpu_type", "label": "CPU type", "kind": "enum",
+   "choices": [["Auto", "auto"], ["386", "386"], ["486", "486"]],
+   "default": "auto", "potato": "auto"},
+  {"key": "dosbox_pure_cpu_core", "label": "CPU core", "kind": "enum",
+   "choices": [["Dynamic (fast)", "dynamic"], ["Normal", "normal"], ["Simple", "simple"]],
+   "default": "dynamic", "potato": "dynamic", "restart": true},
+  {"key": "dosbox_pure_sblaster_type", "label": "Sound Blaster", "kind": "enum",
+   "choices": [["sb16", "sb16"], ["sbpro2", "sbpro2"], ["sb1", "sb1"], ["None", "none"]],
+   "default": "sb16", "potato": "sb16"}
+ ],
+
+ "opera": [
+  {"key": "opera_high_resolution", "label": "High resolution", "kind": "enum",
+   "choices": [["Disabled (1x)", "enabled_hires"], ["Enabled", "disabled"]],
+   "default": "Disabled (1x)", "potato": "Disabled (1x)", "restart": true},
+  {"key": "opera_nvram_shared", "label": "Shared NVRAM", "kind": "enum",
+   "choices": [["Per game", "per game"], ["Global", "global"]],
+   "default": "Per game", "potato": "Per game"}
+ ],
+
+ "bluemsx": [
+  {"key": "bluemsx_msxtype", "label": "MSX type", "kind": "enum",
+   "choices": [["Auto", "Auto"], ["MSX2", "MSX2"], ["MSX2+", "MSX2+"], ["TurboR", "TurboR"]],
+   "default": "Auto", "potato": "Auto", "restart": true},
+  {"key": "bluemsx_vdp_synctype", "label": "VDP sync", "kind": "enum",
+   "choices": [["Auto", "Auto"], ["NTSC", "NTSC"], ["PAL", "PAL"]],
+   "default": "Auto", "potato": "Auto"}
+ ],
+
+ "np2kai": [
+  {"key": "np2kai_cpu_feature", "label": "CPU", "kind": "enum",
+   "choices": [["Auto", "auto"], ["V30", "v30"], ["386", "386"]],
+   "default": "auto", "potato": "auto"},
+  {"key": "np2kai_rumble", "label": "Rumble", "kind": "enum",
+   "choices": [["Disabled", "disabled"], ["Enabled", "enabled"]],
+   "default": "disabled", "potato": "disabled"}
+ ],
+
+ "mednafen_pce_fast": [
+  {"key": "pce_fast_nospritelimit", "label": "Remove sprite limit", "kind": "enum",
+   "choices": [["Disabled", "disabled"], ["Enabled", "enabled"]],
+   "default": "disabled", "potato": "disabled"},
+  {"key": "pce_fast_initial_scanline", "label": "Overscan crop", "kind": "enum",
+   "choices": [["Full", "0"], ["Cropped", "14"]],
+   "default": "Full", "potato": "Full"}
+ ],
+
+ "mednafen_pce": [
+  {"key": "pce_cd_access_method", "label": "CD access", "kind": "enum",
+   "choices": [["Async", "async"], ["Sync", "sync"], ["Preload", "preload"]],
+   "default": "async", "potato": "async", "restart": true},
+  {"key": "pce_nospritelimit", "label": "Remove sprite limit", "kind": "enum",
+   "choices": [["Disabled", "disabled"], ["Enabled", "enabled"]],
+   "default": "disabled", "potato": "disabled"}
+ ],
+
+ "mednafen_ngp": [
+  {"key": "ngp_language", "label": "Language", "kind": "enum",
+   "choices": [["Japanese", "japanese"], ["English", "english"]],
+   "default": "japanese", "potato": "japanese"}
+ ],
+
+ "mednafen_wswan": [
+  {"key": "wswan_rotate", "label": "Screen rotation", "kind": "enum",
+   "choices": [["Horizontal", "horizontal"], ["Vertical", "vertical"]],
+   "default": "horizontal", "potato": "horizontal"},
+  {"key": "wswan_palette", "label": "Palette", "kind": "enum",
+   "choices": [["Default", "default"], ["Mono", "mono"]],
+   "default": "default", "potato": "default"}
+ ],
+
+ "mednafen_pcfx": [
+  {"key": "pcfx_cd_access_method", "label": "CD access", "kind": "enum",
+   "choices": [["Async", "async"], ["Sync", "sync"]],
+   "default": "async", "potato": "async"}
+ ],
+
+ "scummvm": [
+  {"key": "scummvm_speed", "label": "Speed", "kind": "enum",
+   "choices": [["Normal", "normal"], ["Fast", "fast"]],
+   "default": "normal", "potato": "normal"},
+  {"key": "scummvm_render_mode", "label": "Render mode", "kind": "enum",
+   "choices": [["Software", "software"], ["OpenGL", "opengl"]],
+   "default": "software", "potato": "software", "restart": true}
+ ],
+
+ "fceumm": [
+  {"key": "fceumm_palette", "label": "Palette", "kind": "enum",
+   "choices": [["Default", "default"], ["Composite", "composite"], ["S-Video", "svideo"]],
+   "default": "default", "potato": "default"},
+  {"key": "fceumm_overclocking", "label": "Overclocking", "kind": "enum",
+   "choices": [["Disabled", "disabled"], ["2x", "2x"]],
+   "default": "disabled", "potato": "disabled"}
+ ]
+}
