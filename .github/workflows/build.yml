@@ -1,45 +1,28 @@
-# RetroFusion - full Android build pipeline
-#
-# Produces, for every run:
-#   RetroFusion-<version>-arm64-v8a.apk    (signed, < 100 MB)
-#   RetroFusion-<version>-armeabi-v7a.apk  (signed, < 100 MB)
-#   SHA256SUMS.txt, mapping.txt, build report
-#
-# Design notes:
-#   * Cores are built as a *matrix* so 24 cores x 2 ABIs compile in parallel on
-#     separate runners instead of one 3-hour serial job.
-#   * Everything is pinned: PPSSPP v1.18.1 and one commit per core (see
-#     cores/manifest.json), so a rebuild months later produces the same bytes.
-#   * Signing material exists only in repository secrets; the workflow never
-#     prints it and fails closed when it is absent.
-#
-# SPDX-License-Identifier: GPL-2.0-or-later
-name: Build RetroFusion APK
-
-on:
+name: RetroFusion Build
+'on':
   workflow_dispatch:
     inputs:
       version:
-        description: 'Version name (e.g. 1.0.0-rf1)'
+        description: Version name
         required: false
-        default: '1.0.0-rf1'
+        default: 1.0.0-rf1
   push:
     tags:
-      - 'rf-v*'
-
+    - rf-v*
 permissions:
   contents: write
-
 env:
-  PPSSPP_REPO: 'https://github.com/hrydgard/ppsspp.git'
-  PPSSPP_TAG: 'v1.18.1'
+  PPSSPP_REPO: https://github.com/hrydgard/ppsspp.git
+  PPSSPP_TAG: v1.18.1
   ANDROID_API: '21'
-  VERSION: ${{ inputs.version || '1.0.0-rf1' }}
-
 jobs:
-  # ---------------------------------------------------------------------------
-  # 1. Build every libretro core for every ABI, in parallel.
-  # ---------------------------------------------------------------------------
+  verify-host-layer:
+    name: host layer tests
+    runs-on: ubuntu-22.04
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build and run host tests
+      run: make -C tests
   cores:
     name: core ${{ matrix.core }} (${{ matrix.abi }})
     runs-on: ubuntu-22.04
@@ -47,211 +30,157 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        abi: [arm64-v8a, armeabi-v7a]
+        abi:
+        - arm64-v8a
+        - armeabi-v7a
         core:
-          - fceumm
-          - gambatte
-          - mgba
-          - snes9x
-          - picodrive
-          - genesis_plus_gx
-          - mupen64plus_next
-          - melonds
-          - flycast
-          - mednafen_saturn
-          - mednafen_psx
-          - opera
-          - puae
-          - fbneo
-          - bluemsx
-          - mednafen_wswan
-          - mednafen_ngp
-          - np2kai
-          - mednafen_pcfx
-          - mednafen_pce_fast
-          - mednafen_pce
-          - dosbox_pure
-          - scummvm
-          # DeSmuME is the armeabi-v7a fallback for NDS (melonDS needs 64-bit).
-          - desmume
+        - fceumm
+        - gambatte
+        - mgba
+        - snes9x
+        - picodrive
+        - genesis_plus_gx
+        - mupen64plus_next
+        - melonds
+        - flycast
+        - mednafen_saturn
+        - mednafen_psx
+        - opera
+        - puae
+        - fbneo
+        - bluemsx
+        - mednafen_wswan
+        - mednafen_ngp
+        - np2kai
+        - mednafen_pcfx
+        - mednafen_pce_fast
+        - mednafen_pce
+        - dosbox_pure
+        - scummvm
+        - desmume
         exclude:
-          # No point building a 32-bit fallback for the 64-bit ABI.
-          - abi: arm64-v8a
-            core: desmume
+        - abi: arm64-v8a
+          core: desmume
     steps:
-      - uses: actions/checkout@v4
+    - uses: actions/checkout@v4
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+    - name: Set up Android NDK
+      uses: nttld/setup-ndk@v1
+      id: ndk
+      with:
+        ndk-version: r26c
+        add-to-path: false
+    - name: Build core
+      env:
+        ANDROID_NDK_HOME: ${{ steps.ndk.outputs.ndk-path }}
+      run: 'set -euo pipefail
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
+        chmod +x scripts/build-core.sh
 
-      - name: Set up Android NDK
-        uses: nttld/setup-ndk@v1
-        id: ndk
-        with:
-          ndk-version: r26c
-          add-to-path: false
+        scripts/build-core.sh "${{ matrix.core }}" "${{ matrix.abi }}" "dist/cores/${{ matrix.abi }}"
 
-      - name: Build core
-        env:
-          ANDROID_NDK_HOME: ${{ steps.ndk.outputs.ndk-path }}
-        run: |
-          set -euo pipefail
-          chmod +x scripts/build-core.sh
-          scripts/build-core.sh "${{ matrix.core }}" "${{ matrix.abi }}" "dist/cores/${{ matrix.abi }}"
-          ls -l "dist/cores/${{ matrix.abi }}"
+        ls -l "dist/cores/${{ matrix.abi }}"
 
-      - name: Upload core artefact
-        uses: actions/upload-artifact@v4
-        with:
-          name: core-${{ matrix.core }}-${{ matrix.abi }}
-          path: dist/cores/${{ matrix.abi }}/*.so
-          if-no-files-found: error
-          retention-days: 7
-
-  # ---------------------------------------------------------------------------
-  # 2. Integrate, build PPSSPP, sign, verify, publish.
-  # ---------------------------------------------------------------------------
+        '
+    - name: Upload core artefact
+      uses: actions/upload-artifact@v4
+      with:
+        name: core-${{ matrix.core }}-${{ matrix.abi }}
+        path: dist/cores/${{ matrix.abi }}/*.so
+        if-no-files-found: error
+        retention-days: 7
   apk:
     name: assemble + sign APK
     needs: cores
-    # Build the APK even if some cores failed: a core that did not build simply
-    # is not packaged, and the build report lists it. This is what lets the very
-    # first CI run produce an installable artefact instead of nothing at all.
     if: always()
     runs-on: ubuntu-22.04
     timeout-minutes: 240
     steps:
-      - uses: actions/checkout@v4
+    - uses: actions/checkout@v4
+    - name: Collect all core artefacts
+      uses: actions/download-artifact@v4
+      with:
+        pattern: core-*
+        path: dist/cores-downloaded
+        merge-multiple: false
+    - name: Arrange cores as jniLibs (lib/cores/<abi>)
+      run: "set -euo pipefail\nmkdir -p ppsspp/lib/cores/arm64-v8a ppsspp/lib/cores/armeabi-v7a\nfor d in dist/cores-downloaded/core-*; do\n  case \"$d\" in\n    *arm64-v8a)    cp -v \"$d\"/*.so ppsspp/lib/cores/arm64-v8a/\
+        \ ;;\n    *armeabi-v7a)  cp -v \"$d\"/*.so ppsspp/lib/cores/armeabi-v7a/ ;;\n  esac\ndone\ndu -sh ppsspp/lib/cores/*\necho \"## packaged cores\" >> $GITHUB_STEP_SUMMARY\nls -1 ppsspp/lib/cores/arm64-v8a\
+        \ | sed 's/^/arm64: /' >> $GITHUB_STEP_SUMMARY\nls -1 ppsspp/lib/cores/armeabi-v7a | sed 's/^/armv7: /' >> $GITHUB_STEP_SUMMARY\n"
+    - name: Clone PPSSPP with submodules
+      run: "set -euo pipefail\n# The ppsspp/ directory was created above for cores; move it aside,\n# clone into ppsspp-src and copy the cores in afterwards.\nmv ppsspp/lib ppsspp-lib\ngit clone --recurse-submodules\
+        \ --depth 1 --branch \"$PPSSPP_TAG\" \\\n  \"$PPSSPP_REPO\" ppsspp-src\nmkdir -p ppsspp-src/lib\ncp -r ppsspp-lib/cores ppsspp-src/lib/cores\ngit -C ppsspp-src submodule update --init --recursive\n\
+        git -C ppsspp-src rev-parse HEAD | tee ppsspp-commit.txt\n"
+    - name: Integrate RetroFusion sources + patches
+      run: 'set -euo pipefail
 
-      - name: Collect all core artefacts
-        uses: actions/download-artifact@v4
-        with:
-          pattern: core-*
-          path: dist/cores-downloaded
-          merge-multiple: false
+        chmod +x scripts/integrate-ppsspp.sh
 
-      - name: Arrange cores as jniLibs (lib/cores/<abi>)
-        run: |
-          set -euo pipefail
-          mkdir -p ppsspp/lib/cores/arm64-v8a ppsspp/lib/cores/armeabi-v7a
-          for d in dist/cores-downloaded/core-*; do
-            case "$d" in
-              *arm64-v8a)    cp -v "$d"/*.so ppsspp/lib/cores/arm64-v8a/ ;;
-              *armeabi-v7a)  cp -v "$d"/*.so ppsspp/lib/cores/armeabi-v7a/ ;;
-            esac
-          done
-          du -sh ppsspp/lib/cores/*
-          echo "## packaged cores" >> $GITHUB_STEP_SUMMARY
-          ls -1 ppsspp/lib/cores/arm64-v8a | sed 's/^/arm64: /' >> $GITHUB_STEP_SUMMARY
-          ls -1 ppsspp/lib/cores/armeabi-v7a | sed 's/^/armv7: /' >> $GITHUB_STEP_SUMMARY
+        scripts/integrate-ppsspp.sh ppsspp-src
 
-      - name: Clone PPSSPP with submodules
-        run: |
-          set -euo pipefail
-          # The ppsspp/ directory was created above for cores; move it aside,
-          # clone into ppsspp-src and copy the cores in afterwards.
-          mv ppsspp/lib ppsspp-lib
-          git clone --recurse-submodules --depth 1 --branch "$PPSSPP_TAG" \
-            "$PPSSPP_REPO" ppsspp-src
-          mkdir -p ppsspp-src/lib
-          cp -r ppsspp-lib/cores ppsspp-src/lib/cores
-          git -C ppsspp-src submodule update --init --recursive
-          git -C ppsspp-src rev-parse HEAD | tee ppsspp-commit.txt
+        '
+    - name: Fail if the PSP core was modified
+      run: "set -euo pipefail\ncd ppsspp-src\n# Requirement 7a / 12.6: the PSP emulation core must be untouched.\nif [ -n \"$(git status --porcelain -- Core/ ':(exclude)Core/RetroFusion')\" ]; then\n  echo\
+        \ \"ERROR: files under Core/ were modified\" >&2\n  git status --porcelain -- Core/ >&2\n  exit 1\nfi\necho \"ok: Core/ untouched\"\n"
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        distribution: temurin
+        java-version: '17'
+    - name: Set up Android SDK
+      uses: android-actions/setup-android@v3
+    - name: Install NDK matching PPSSPP's ndkVersion
+      run: 'yes | sdkmanager --licenses > /dev/null || true
 
-      - name: Integrate RetroFusion sources + patches
-        run: |
-          set -euo pipefail
-          chmod +x scripts/integrate-ppsspp.sh
-          scripts/integrate-ppsspp.sh ppsspp-src
+        sdkmanager "ndk;21.4.7075529" "cmake;3.22.1"
 
-      - name: Fail if the PSP core was modified
-        run: |
-          set -euo pipefail
-          cd ppsspp-src
-          # Requirement 7a / 12.6: the PSP emulation core must be untouched.
-          if [ -n "$(git status --porcelain -- Core/ ':(exclude)Core/RetroFusion')" ]; then
-            echo "ERROR: files under Core/ were modified" >&2
-            git status --porcelain -- Core/ >&2
-            exit 1
-          fi
-          echo "ok: Core/ untouched"
+        '
+    - name: Decode keystore from secrets
+      env:
+        KEYSTORE_BASE64: ${{ secrets.RETROFUSION_KEYSTORE_BASE64 }}
+      run: "set -euo pipefail\nif [ -z \"${KEYSTORE_BASE64:-}\" ]; then\n  echo \"::error::RETROFUSION_KEYSTORE_BASE64 secret is missing - refusing to produce an unsigned build\"\n  exit 1\nfi\necho \"\
+        $KEYSTORE_BASE64\" | base64 -d > \"$RUNNER_TEMP/retrofusion.jks\"\necho \"keystore decoded ($(stat -c%s \"$RUNNER_TEMP/retrofusion.jks\") bytes)\"\n"
+    - name: Build release APKs (per ABI)
+      env:
+        RELEASE_KEY_STORE: ${{ runner.temp }}/retrofusion.jks
+        RELEASE_KEY_ALIAS: ${{ secrets.RETROFUSION_KEY_ALIAS }}
+        RELEASE_KEY_PASSWORD: ${{ secrets.RETROFUSION_KEY_PASSWORD }}
+        RELEASE_STORE_PASSWORD: ${{ secrets.RETROFUSION_STORE_PASSWORD }}
+      run: "set -euo pipefail\ncd ppsspp-src\nchmod +x gradlew\n# --no-daemon keeps memory use predictable on a 4 GB runner.\n./gradlew --no-daemon assembleNormalRelease \\\n  -PANDROID_VERSION_NAME=\"\
+        $VERSION\" \\\n  -PANDROID_VERSION_CODE=\"${GITHUB_RUN_NUMBER}0\"\n"
+    - name: Verify size, signature and ABI
+      run: 'set -euo pipefail
 
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: '17'
+        chmod +x scripts/package-apk.sh
 
-      - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
+        scripts/package-apk.sh ppsspp-src dist/apk "$VERSION"
 
-      - name: Install NDK matching PPSSPP's ndkVersion
-        run: |
-          yes | sdkmanager --licenses > /dev/null || true
-          sdkmanager "ndk;21.4.7075529" "cmake;3.22.1"
+        '
+    - name: Upload APKs
+      uses: actions/upload-artifact@v4
+      with:
+        name: RetroFusion-APKs
+        path: 'dist/apk/*.apk
 
-      - name: Decode keystore from secrets
-        env:
-          KEYSTORE_BASE64: ${{ secrets.RETROFUSION_KEYSTORE_BASE64 }}
-        run: |
-          set -euo pipefail
-          if [ -z "${KEYSTORE_BASE64:-}" ]; then
-            echo "::error::RETROFUSION_KEYSTORE_BASE64 secret is missing - refusing to produce an unsigned build"
-            exit 1
-          fi
-          echo "$KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/retrofusion.jks"
-          echo "keystore decoded ($(stat -c%s "$RUNNER_TEMP/retrofusion.jks") bytes)"
+          dist/apk/SHA256SUMS.txt
 
-      - name: Build release APKs (per ABI)
-        env:
-          RELEASE_KEY_STORE: ${{ runner.temp }}/retrofusion.jks
-          RELEASE_KEY_ALIAS: ${{ secrets.RETROFUSION_KEY_ALIAS }}
-          RELEASE_KEY_PASSWORD: ${{ secrets.RETROFUSION_KEY_PASSWORD }}
-          RELEASE_STORE_PASSWORD: ${{ secrets.RETROFUSION_STORE_PASSWORD }}
-        run: |
-          set -euo pipefail
-          cd ppsspp-src
-          chmod +x gradlew
-          # --no-daemon keeps memory use predictable on a 4 GB runner.
-          ./gradlew --no-daemon assembleNormalRelease \
-            -PANDROID_VERSION_NAME="$VERSION" \
-            -PANDROID_VERSION_CODE="${GITHUB_RUN_NUMBER}0"
+          dist/apk/BUILD-REPORT.txt
 
-      - name: Verify size, signature and ABI
-        run: |
-          set -euo pipefail
-          chmod +x scripts/package-apk.sh
-          scripts/package-apk.sh ppsspp-src dist/apk "$VERSION"
+          '
+        if-no-files-found: error
+    - name: Publish GitHub Release
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: softprops/action-gh-release@v2
+      with:
+        name: RetroFusion release
+        body_path: dist/apk/BUILD-REPORT.txt
+        files: 'dist/apk/*.apk
 
-      - name: Upload APKs
-        uses: actions/upload-artifact@v4
-        with:
-          name: RetroFusion-APKs
-          path: |
-            dist/apk/*.apk
-            dist/apk/SHA256SUMS.txt
-            dist/apk/BUILD-REPORT.txt
-          if-no-files-found: error
+          dist/apk/SHA256SUMS.txt
 
-      - name: Publish GitHub Release
-        if: startsWith(github.ref, 'refs/tags/')
-        uses: softprops/action-gh-release@v2
-        with:
-          name: RetroFusion release
-          body_path: dist/apk/BUILD-REPORT.txt
-          files: |
-            dist/apk/*.apk
-            dist/apk/SHA256SUMS.txt
-
-  # ---------------------------------------------------------------------------
-  # 3. Host-layer regression tests (fast, no device needed).
-  # ---------------------------------------------------------------------------
-  tests:
-    name: host layer tests
-    runs-on: ubuntu-22.04
-    steps:
-      - uses: actions/checkout@v4
-      - name: Build and run host tests
-        run: make -C tests
+          '
+    env:
+      VERSION: ${{ inputs.version || '1.0.0-rf1' }}

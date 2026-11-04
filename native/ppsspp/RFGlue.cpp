@@ -232,6 +232,10 @@ public:
 
 	const char *tag() const override { return "RFEmu"; }
 
+	// UIScreen declares this pure virtual (Common/UI/UIScreen.h). The core draws
+	// straight into its own texture, so there are no UI::View children.
+	void CreateViews() override {}
+
 	void update() override {
 		UIScreen::update();
 		if (!g_rf.host.Loaded()) return;
