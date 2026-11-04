@@ -35,7 +35,7 @@ echo "PPSSPP: $(cat "$TREE/../ppsspp-commit.txt" 2>/dev/null || echo unknown)" |
 echo | tee -a "$REPORT"
 
 shopt -s nullglob
-APS=( "$TREE"/android/build/outputs/apk/normal/release/*.apk )
+mapfile -t APS < <(find "$TREE/android/build/outputs/apk" -name "*.apk" -path "*release*" 2>/dev/null | sort)
 [ ${#APS[@]} -gt 0 ] || fail "no release APK produced - check the gradle log"
 
 for apk in "${APS[@]}"; do

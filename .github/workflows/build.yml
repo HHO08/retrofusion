@@ -117,8 +117,12 @@ jobs:
   apk:
     name: assemble + sign APK
     needs: cores
+    # Build the APK even if some cores failed: a core that did not build simply
+    # is not packaged, and the build report lists it. This is what lets the very
+    # first CI run produce an installable artefact instead of nothing at all.
+    if: always()
     runs-on: ubuntu-22.04
-    timeout-minutes: 180
+    timeout-minutes: 240
     steps:
       - uses: actions/checkout@v4
 
@@ -140,6 +144,9 @@ jobs:
             esac
           done
           du -sh ppsspp/lib/cores/*
+          echo "## packaged cores" >> $GITHUB_STEP_SUMMARY
+          ls -1 ppsspp/lib/cores/arm64-v8a | sed 's/^/arm64: /' >> $GITHUB_STEP_SUMMARY
+          ls -1 ppsspp/lib/cores/armeabi-v7a | sed 's/^/armv7: /' >> $GITHUB_STEP_SUMMARY
 
       - name: Clone PPSSPP ${{ env.PPSSPP_TAG }} with submodules
         run: |
