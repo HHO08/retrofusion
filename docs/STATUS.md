@@ -67,3 +67,45 @@ broken APKs.
 3. **M3 — per-system test pass** using `docs/TEST-PLAN.md`, root-cause write-ups
    for NDS and Dreamcast filled in with real logs, then the Drive handover of the
    Arabic-named APK.
+
+---
+
+## Report #2 — 2026-11-04 (after repository access was provided)
+
+### What was actually done on GitHub
+
+| Action | Result |
+|---|---|
+| Repository created | `HHO08/retrofusion` (public, default branch `main`) |
+| Code pushed | 45 files, 4 commits, tree verified through the API |
+| Signing secrets | `RETROFUSION_KEYSTORE_BASE64`, `_KEY_ALIAS`, `_KEY_PASSWORD`, `_STORE_PASSWORD` — all returned **HTTP 201** and are listed in the repo |
+| Keystore | generated here (RSA 4096, PKCS12, 30-year validity, alias `retrofusion`), encrypted into the secret; the password exists **only** inside the two password secrets |
+| Workflows | `build.yml` committed; several probe workflows were used to diagnose platform behaviour |
+
+### The blocker (measured, not guessed)
+
+GitHub Actions does not execute jobs for this repository:
+
+* 4 workflow runs have been in `queued` since 16:09–16:11 UTC and never started.
+* The queued job reports `"runner": null`, `started_at` set, `steps: []` — i.e. **no runner was ever assigned**, which is not normal queueing latency (a trivial job normally starts in ≤60 s).
+* No new runs have been created for pushes after 16:11 UTC.
+* Freshly added workflow files are not being indexed (`total_count` stays at the two files that existed before), while `GET /repos/.../actions/permissions` reports `enabled: true`.
+
+This is an account-level restriction on running Actions, not a repository or workflow problem. It cannot be fixed with an API token. Things to check on the account: **Settings → Billing & plans → Actions** (spending limit / payment method), **email verification**, **Settings → Actions → General**, and the "Your account is flagged" banner. A **self-hosted runner** attached to the repo bypasses all of it.
+
+### A verification win that does not need CI
+
+`scripts/check-compile.sh` performs `g++ -fsyntax-only` of **every RetroFusion source file plus the patched upstream files against the real PPSSPP v1.18.1 headers**. It runs in ~4 s on a machine with no NDK and caught a genuine error that would otherwise have cost a 40-minute CI round trip:
+
+> `RFEmuScreen` was abstract — `UIScreen::CreateViews()` is pure virtual. Fixed.
+
+Current result: **9/9 checkable targets OK** (`UI/GameSettingsScreen.cpp` needs git submodules, which CI has), plus **40/40 host-layer tests green**.
+
+### What remains unverified until jobs actually run
+
+1. The libretro cores' per-core build flags (first real compile).
+2. PPSSPP's full Android build with the integration (`gradle assembleNormalRelease`).
+3. Signing + `package-apk.sh` size enforcement.
+4. On-device behaviour of every system.
+
+Nothing else is pending on my side: the moment runners start, `Actions → RetroFusion Build → Run workflow` produces the two signed APKs and the release.
